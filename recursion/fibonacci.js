@@ -8,3 +8,8 @@ output   0 1 1 2 3 5 8 13 21 34 ...
 
 What is the time complexity? Can you think of optimizing your solution? (Hint: look up dynamic programming)
 */
+
+const fibN =
+  num => num > 1 ? fibN(num - 1) + fibN(num - 2) : num
+
+[...Array(10).keys()].forEach(i => console.log(fibN(i)))
