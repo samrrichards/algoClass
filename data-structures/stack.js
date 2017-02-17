@@ -10,7 +10,6 @@ Note that there is a natural order. Elements are removed in the reverse order of
 DO NOT use an array and the native push/pop method in your implementation. That's too easy, yeah? =P
 Use an object as the underlying data structure.
 
-
 *** Operations:
 
 myStack.push(value)
@@ -46,34 +45,73 @@ myStack.until(7)
 => 4
 What's the time complexity?
 
-
-
  */
+const _ = require('lodash')
 
-function Stack(capacity) {
-  // implement me...
+class Stack  {
+  constructor(capacity) {    
+    this.capacity = capacity
+    this.values = {}
+    this.size = 0
+  }
+
+  push(value) {
+    if (this.size < this.capacity) {
+      this.values[this.size] = value
+      this.size++
+      console.log(`Added ${value} at index ${this.size-1}!`)
+    } else {
+      console.log(`Sorry, I already have ${this.capacity} elements!`)
+    }
+
+    return this.size
+    // Time complexity: O(1)
+  }
+
+  pop(){
+    const val = this.values[this.size-1]
+
+    //Lodash. Is. Awesome.
+
+    this.values = _.pick(this.values, [...Array(this.size-2).keys()])
+
+    //This is what I would do if I couldn't use lodash:
+
+    // let newVals = {}
+    // for (let i = 0; i < this.size-1; i++) {
+    //   newVals[i] = this.values[i]
+    // }
+    // this.values = newVals
+
+    this.size--
+    console.log(`Just popped ${val} from the stack!`)
+    return val
+    // Time complexity: O(n)
+  }
+
+  peek(){
+    console.log(`The latest value is ${this.values[this.size-1]}!`)
+    return this.values[this.size-1]
+    // Time complexity: O(1)
+  }
+
+  count(){
+    console.log(`There are ${this.size} elements in the stack!`)
+    return this.size
+    // Time complexity: O(1)
+  }
 }
 
-Stack.prototype.push = function(value) {
-  // implement me...
-};
-// Time complexity:
+let myStack = new Stack(3)
 
-Stack.prototype.pop = function() {
-  // implement me...
-};
-// Time complexity:
-
-Stack.prototype.peek = function() {
-  // implement me...
-};
-// Time complexity:
-
-Stack.prototype.count = function() {
-  // implement me...
-};
-// Time complexity:
-
+myStack.push("Athos")
+myStack.push("Porthos")
+myStack.push("Aramis")
+myStack.push("D'Artagnan")
+myStack.pop()
+myStack.count()
+myStack.push("D'Artagnan")
+myStack.peek()
 
 /*
 *** Exercises:
