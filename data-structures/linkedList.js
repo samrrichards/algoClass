@@ -80,69 +80,181 @@ Reimplement stack and queue data structures using linked lists.
 
 // PART 1
 
-function Node(value) {
-  this.next = null;
-  this.value = value;
+class Node {
+  constructor(value) {
+    this.next = null
+    this.value = value
+  }
 }
 
-function LinkedList(headValue) {
-  if (headValue === undefined) console.log('Must provide value for first node');
-  this.head = new Node(headValue);
+class LinkedList {
+  constructor(headValue) {
+    if (headValue === undefined) console.log('Must provide value for first node');
+    this.head = new Node(headValue);
+    this.tail = this.head
+  }
+
+  forEach = (callback) => {
+    //Just like good old Eloquent JavaScript ch. 4...
+    for (let node = this.head; node; node = node.next) {
+      callback(node.value)
+    }
+  }
+  // Time complexity: O(n)
+
+  print = () => {
+    // => string with all values in list (ex: '0, 1, 2, 3')
+    let valueString = ''
+    this.forEach(val => valueString += `${val}, `)
+    return valueString
+  }
+  // Time complexity: O(n)
+
+  findNode = (value) => {
+    // => first node that has a value matching what was passed in
+    let foundNode = null
+
+    //I wanted to use forEach, but you can't access entire nodes with it...
+    for (let node = this.head; node; node = node.next) {
+      if (node.value === value && foundNode !== null)
+        foundNode = node
+    }
+
+    return foundNode
+  }
+  // Time complexity: O(n)
+
+  findBefore = (value) => {
+    // Helper function like findNode, but for the node *before* that node
+    let foundNode = this.head.value === value ? this.head : null
+
+    if (foundNode !== null) {
+      for (let node = this.head; node; node = node.next) {
+        if (node.next.value === value && foundNode !== null)
+          foundNode = node
+      }
+    }
+
+    return foundNode
+  }
+  // Time complexity: O(n)
+
+  insertHead = (value) => {
+    // => new head
+    // insert new head node at the beginning of the list with the value passed in
+    const oldHead = this.head
+    this.head = new Node(value)
+    this.head.next = oldHead
+    return this.head
+  }
+  // Time complexity: O(1)
+
+  removeHead = () => {
+    // => removed head node
+    // remove the head node of the linked list
+    const oldHead = this.head
+    this.head = this.head.next
+    return oldHead
+  }
+  // Time complexity: O(1)
+
+  appendToTail = (value) => {
+    // => new tail node
+    // add a new tail node at the end of the list with the associated value passed in
+    const newTail = new Node(value)
+    this.tail.next = newTail
+    this.tail = this.tail.next
+    return this.tail
+  }
+  // Time complexity: O(1)
+
+  removeTail = () => {
+    const oldTail = this.tail
+    const newTail = this.findBefore(this.tail.value)
+
+    this.tail = newTail
+    this.tail.next = null
+
+    return oldTail
+  }
+  //Time complexity: O(n)
+
+  insertAfter = (node, value) => {
+    // This assumes that values are unique
+
+    let afterNode = this.findNode(node.value)
+
+    if (this.tail.value === afterNode.value) {
+      this.appendToTail(value)
+    } else {
+      let nextNode = afterNode.next
+      const newNode = new Node(value)
+
+      newNode.next = nextNode
+      afterNode.next =  newNode
+      return newNode
+    }
+  }
+  // Time complexity: O(n)
+
+  removeAfter = (node) => {
+    // This assumes that values are unique
+    let afterNode = this.findNode(node.value)
+
+    if (afterNode.value === this.tail.value) {
+      return null
+    } else {
+      const nextNode = afterNode.next
+
+      afterNode.next = nextNode.next
+      return nextNode
+    }
+  }
+  // Time complexity: O(n), assuming you remove s
+
+  insertBefore = (node, value) => {
+    // This assumes that values are unique
+    let beforeNode = this.findBefore(node.value)
+
+    if (beforeNode.value === this.head.value) {
+      this.insertHead(value)
+    } else {
+      let nextNode = beforeNode.next
+      const newNode = new Node(value)
+
+      newNode.next = nextNode
+      beforeNode.next =  newNode
+      return newNode
+    }
+  }
+  // Time complexity: O(n)
+
+  removeBefore = (node) => {
+    // This assumes that values are unique
+    let beforeNode = this.findBefore(node.value)
+
+    if (beforeNode.value === this.head.value) {
+      this.removeHead()
+    } else {
+      const nextNode = beforeNode.next
+
+      beforeNode.next = nextNode.next
+      return nextNode
+    }
+  }
+  // Time complexity: O(n)
 }
-
-LinkedList.prototype.forEach = function(callback) {
-  // implement me...
-};
-// Time complexity:
-
-LinkedList.prototype.print = function() {
-  // implement me...
-};
-// Time complexity:
-
-LinkedList.prototype.insertAfter = function(node, value) {
-  // implement me...
-};
-// Time complexity:
-
-LinkedList.prototype.removeAfter = function(node) {
-  // implement me...
-};
-// Time complexity:
-
-LinkedList.prototype.insertHead = function(value) {
-  // implement me...
-};
-// Time complexity:
-
-LinkedList.prototype.removeHead = function() {
-  // implement me...
-}
-
-LinkedList.prototype.findNode = function(value) {
-  // implement me...
-};
-// Time complexity:
-
-LinkedList.prototype.appendToTail = function(value) {
-  // implement me...
-};
-// Time complexity:
-
-
-// PART 2:
-
-LinkedList.prototype.insertBefore = function(node, value) {
-  // implement me...
-};
-// Time complexity:
-
-LinkedList.prototype.removeBefore = function(node) {
-  // implement me...
-};
-// Time complexity:
-
-
+//  The beginning of a testing suite: 
+//
+// const sampleValues = ['friendship', 'honesty', 'respect', 'inclusiveness', 'fun']
+//
+// let myList = new List('awesomness')
+//
+// sampleValues.forEach(item => myList.appendToTail(item))
+//
+// myList.removeHead()
+// myList.removeTail()
+// myList.appendToTail('laughter')
 
 /*
 *** Exercises:
