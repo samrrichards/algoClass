@@ -28,6 +28,78 @@ myQueue.count()
 => number of elements in queue
 
 
+ */
+
+ class Queue {
+   constructor(capacity) {
+     this.capacity = capacity
+     this.values = {}
+     this.size = 0
+   }
+
+   enqueue(value) {
+     if (this.size < this.capacity) {
+       this.values[this.size] = value
+       this.size++
+       console.log(`Added ${value} at index ${this.size-1}!`)
+     } else {
+       console.log(`Sorry, I already have ${this.capacity} elements!`)
+     }
+
+     return this.size
+   }
+   //Time complexity: O(1)
+
+   dequeue(value) {
+     const val = this.values[0]
+     let newVals = {}
+
+     for (let i = 1; i < this.size-1; i++) {
+       newVals[i-1] = this.values[i]
+     }
+
+     this.values = newVals
+     this.size--
+
+     console.log(`Just removed ${val} from the queue!`)
+     return val
+   }
+   //Time complexity: O(n)
+
+   peek() {
+     console.log(`The value at the top of the queue is ${this.values[0]}!`)
+     return this.values[0]
+   }
+   //Time complexity: O(1)
+
+   count() {
+     console.log(`There are ${this.size} elements in the queue!`)
+     return this.size
+   }
+   //Time complexity: O(1)
+ }
+
+ let myQueue = new Queue(3)
+
+ myQueue.enqueue("Athos")
+ myQueue.enqueue("Porthos")
+ myQueue.enqueue("Aramis")
+ myQueue.enqueue("D'Artagnan")
+ myQueue.dequeue()
+ myQueue.count()
+ myQueue.enqueue("D'Artagnan")
+ myQueue.peek()
+
+/*
+*** Exercises:
+
+1. Implement a queue using two stacks.
+
+2. Implement a double-ended queue, with the following methods: enqueueLeft, dequeueLeft, enqueueRight, dequeueRight.
+
+3. Given a tree, print out the value of each node in breadth-first order using a queue data structure.
+
+
 *** Additional Exercises:
 
 Modify your queue to take a max capacity and return a string if you try to add an element when there's no more room:
@@ -44,45 +116,5 @@ queue values - (first)2-5-7-3-6-9(last)
 myQueue.until(7)
 => 3
 What's the time complexity?
-
-
-
-
- */
-
-function Queue(capacity) {
-  // implement me...
-}
-
-Queue.prototype.enqueue = function(value) {
-  // implement me...
-};
-// Time complexity:
-
-Queue.prototype.dequeue = function() {
-  // implement me...
-};
-// Time complexity:
-
-Queue.prototype.peek = function() {
-  // implement me...
-};
-
-Queue.prototype.count = function() {
-  // implement me...
-};
-// Time complexity:
-
-
-
-/*
-*** Exercises:
-
-1. Implement a queue using two stacks.
-
-2. Implement a double-ended queue, with the following methods: enqueueLeft, dequeueLeft, enqueueRight, dequeueRight.
-
-3. Given a tree, print out the value of each node in breadth-first order using a queue data structure.
-
 
  */
